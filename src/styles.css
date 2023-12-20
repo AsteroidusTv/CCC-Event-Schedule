@@ -1,0 +1,13 @@
+:root {
+    --br: 15px;
+    --cl: #FFFFFF;
+    --bg: #404040;
+}
+
+* {
+    font-family: Arial;
+}
+
+body {
+    background: var(--bg);
+}
