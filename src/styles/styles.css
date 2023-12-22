@@ -1,0 +1,174 @@
+@font-face {
+    font-family: Ubuntu-Light;
+    src: url(../fonts/Ubuntu-Light.ttf);
+}
+
+
+:root {
+    --br: 15px;
+    --cl: #FFFFFF;
+    --bg: #404040;
+    --sc-bg: #FFFFFF;
+}
+
+* {
+    font-family: "Ubuntu-Light";
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    padding: 10px;
+}
+
+.popup-title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 40px;
+    text-transform: uppercase;
+    user-select: none; 
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.close-popup-button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 18px;
+    right: 12px;
+    background: none;
+    cursor: pointer;
+}
+
+.close-popup-button img {
+    width: 50px;
+    height: 50px;
+}
+
+.create-event-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 2%;
+    width: 100%;
+    height: calc(100% - 67.5px);
+    transform: translateY(67.5px);
+}
+
+.create-name-input, .create-date-input, .create-description-input, .create-event-button {
+    width: calc(100% - 20px);
+    border-radius: var(--br);
+    border: 2px solid rgb(0, 0, 0);
+    outline: none;
+    padding: 10px;
+    font-size: 30px;
+
+}
+
+.create-name-input, .create-date-input, .create-event-button {
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
+
+.create-description-input {
+    height: 45%;
+    resize: none;
+}
+
+
+.show-events {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    row-gap: 10px;
+    gap: 10px;
+}
+
+.create-event-button {
+    height: calc(10% + 20px);
+    width: calc(100% + 5px);
+    background: #252424;
+    color: var(--cl);
+    justify-content: center;
+}
+
+.event-container {
+    padding: 10px;
+    border-radius: var(--br);
+    height: 200px;
+    background: white;
+    cursor: pointer;
+}
+
+.event-container button {
+    background: red;
+}
+
+/* Popups styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    backdrop-filter: blur(5px);
+    animation: fade-in 250ms ease-in-out;
+    z-index: 4;
+}
+
+.popup.show {
+    display: flex;
+    animation: fade-in 250ms;
+}
+
+.popup.closing {
+    animation: fade-out 250ms ease-in-out;
+}
+
+.popup-content {
+    border-radius: var(--border-radius);
+    width: 60%;
+    height: 60%;
+    position: relative;
+    display: flex;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: white;
+    border-radius: var(--br);
+    padding: 20px;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}

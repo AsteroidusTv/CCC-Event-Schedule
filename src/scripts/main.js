@@ -1,6 +1,6 @@
 const { invoke } = window.__TAURI__.tauri;
 
-const createForm = document.getElementById("createForm");
+const createEventForm = document.getElementById("createEventForm");
 const createNameInput = document.getElementById("createNameInput");
 const createDateInput = document.getElementById("createDateInput");
 const createDescriptionInput = document.getElementById("createDescriptionInput");
@@ -14,31 +14,63 @@ async function createEvent() {
   });
 }
 
+function deleteEvent(id) {
+  console.log("Yes :", id)
+}
+
 async function showEvent() {
   const result = await invoke("show_event");
+  const showEvents = document.getElementById("showEvents"); // Assurez-vous d'avoir un élément avec cet ID dans votre HTML
 
   for (var i = 0; i < result.length; i++) {
-    var eventDiv = document.createElement('div');
-    var eventName = document.createElement('p');
-    var eventDate = document.createElement('p');
-    var eventDescription = document.createElement('p');
+    const eventDiv = document.createElement('div');
+    const eventName = document.createElement('p');
+    const eventDate = document.createElement('p');
+    const eventDescription = document.createElement('p');
+    const eventDeleteButton = document.createElement('button');
+
+    eventDiv.classList.add("event-container");
 
     eventName.textContent = result[i].name;
     eventDate.textContent = result[i].date;
     eventDescription.textContent = result[i].description;
 
+    eventDeleteButton.id = result[i].name;
+    eventDeleteButton.textContent = "Delete";
+
     eventDiv.appendChild(eventName);
     eventDiv.appendChild(eventDate);
     eventDiv.appendChild(eventDescription);
+    eventDiv.appendChild(eventDeleteButton);
 
     showEvents.appendChild(eventDiv);
+
+    // Utilisation d'une IIFE pour capturer la bonne référence de eventDeleteButton
+    (function(button) {
+      button.onclick = function() {
+        console.log("Delete event with ID:", button.id);
+        deleteEvent(button.id)
+      };
+    })(eventDeleteButton);
   }
 }
 
+async function deleteEvent(eventId) {
+  await invoke("delete_event", {
+    name: eventId,
+  });
+  location.reload();
+}
+
+
+
+
 window.addEventListener("DOMContentLoaded", () => {
   showEvent()
-  createForm.addEventListener("submit", (e) => {
+  createEventForm.addEventListener("submit", (e) => {
     createEvent();
     console.log(createNameInput.value, createDateInput.value, createDescriptionInput.value);
   });
 });
+
+

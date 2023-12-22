@@ -12,7 +12,7 @@ pub struct Event {
 pub fn read_json() -> Vec<Event> {
     let file_path = "./test.json";
 
-    let mut file = File::open(file_path).expect("Erreur lors de l'ouverture du fichier");
+    let mut file = File::open(file_path).expect("");
     let mut contents = String::new();
     file.read_to_string(&mut contents).expect("Erreur lors de la lecture du fichier");
 

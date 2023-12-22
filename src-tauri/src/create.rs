@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::fs::{self, OpenOptions};
+use std::fs::OpenOptions;
 use std::io::{self, Read, Seek};
-use std::path::Path;
 
 #[derive(Serialize, Deserialize)]
 struct Event {
@@ -40,10 +39,6 @@ pub fn write_json(name: String, date: String, description: String) {
         date,
         description,
     };
-
-    if !Path::new("./test.json").exists() {
-        fs::write("./test.json", "[]").expect("Unable to create file");
-    }
 
     if let Err(err) = add_content("./test.json", new_content) {
         eprintln!("Error: {:?}", err);

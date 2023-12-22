@@ -1,21 +1,27 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <script type="module" src="scripts/main.js" defer></script>
+    <script src="scripts/popups.js" defer></script>
     <title>Program</title>
-    <script type="module" src="/main.js" defer></script>
   </head>
-
   <body>
-    <form id="createForm" action="send">
-      <h1>Welcome to my app</h1>
-      <input id="createNameInput" type="text" placeholder="Event name">
-      <input id="createDateInput" type="date" placeholder="Event date">
-      <input id="createDescriptionInput" type="text" placeholder="Event description">
-      <button type="submit">Create</button>
-    </form>
+    <button class="open-popup-button" onclick="openPopup('createEventPopup')">Create</button>
+    <div class="popup" id="createEventPopup">
+      <div class="popup-content">
+        <h1 class="popup-title">Create event</h1>
+        <button class="close-popup-button" onclick="closePopup('createEventPopup')"><img src="./assets/close.svg" alt="close button"></button>
+        <form id="createEventForm" class="create-event-form" action="send">
+          <input id="createNameInput" class="create-name-input" type="text" placeholder="Event name" required>
+          <input id="createDateInput" class="create-date-input" type="datetime-local" placeholder="Event date" required>
+          <textarea id="createDescriptionInput" class="create-description-input" type="text" placeholder="Event description" required></textarea>
+          <button class="create-event-button" type="submit"">Create</button>
+        </form>
+      </div>
+    </div>
     <div id="showEvents" class="show-events">
     </div>
   </body>
