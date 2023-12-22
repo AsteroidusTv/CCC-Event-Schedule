@@ -12,10 +12,7 @@ async function createEvent() {
       createDateValue: createDateInput.value,
       createDescriptionValue: createDescriptionInput.value,
   });
-}
-
-function deleteEvent(id) {
-  console.log("Yes :", id)
+  alert(result);
 }
 
 async function showEvent() {
@@ -48,7 +45,6 @@ async function showEvent() {
     // Utilisation d'une IIFE pour capturer la bonne référence de eventDeleteButton
     (function(button) {
       button.onclick = function() {
-        console.log("Delete event with ID:", button.id);
         deleteEvent(button.id)
       };
     })(eventDeleteButton);

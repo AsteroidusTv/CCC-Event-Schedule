@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 use std::fs::OpenOptions;
 use std::io::{self, Read, Seek};
+use crate::read::read_json;
 
 #[derive(Serialize, Deserialize)]
-struct Event {
+pub struct Event {
     name: String,
     date: String,
     description: String,
@@ -32,6 +33,16 @@ fn add_content(file_path: &str, new_content: Event) -> io::Result<()> {
 
     Ok(())
 }
+
+pub fn verify_json_content(proprety_to_find: String) -> bool {
+    let json = read_json();
+    let found_element = json.iter().find(|&x| x.name.to_lowercase() == proprety_to_find.to_lowercase());
+
+    match found_element {
+        Some(_) => true,
+        None => false,
+    }
+} 
 
 pub fn write_json(name: String, date: String, description: String) {
     let new_content = Event {

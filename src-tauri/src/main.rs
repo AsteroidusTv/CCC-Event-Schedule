@@ -1,25 +1,29 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod create;
-mod read;
+pub mod read;
 mod delete;
 
-use create::write_json;
+use create::{write_json, verify_json_content};
 use read::{read_json, Event};
 use delete::remove_data_json;
-
 use std::fs;
 
-fn verify_file(file: &str, content: &str,) {
+fn verify_file(file: &str, content: &str) {
     if  !fs::metadata(file).is_ok() {
         fs::write(file, content).expect("Unable to create file");
     }
 }
 
 #[tauri::command]
-fn create_event(create_name_value: &str, create_date_value: &str, create_description_value: &str) {
-    let result = write_json(create_name_value.to_string(), create_date_value.to_string(), create_description_value.to_string());
-    result
+fn create_event(create_name_value: &str, create_date_value: &str, create_description_value: &str) -> String {
+    if !verify_json_content(create_name_value.to_string()) {
+        let result = write_json(create_name_value.to_string(), create_date_value.to_string(), create_description_value.to_string());
+        format!("{:?}", result)
+    }
+    else {
+        "You can not create two event with the same name !".to_string()
+    }
 }
 
 #[tauri::command]

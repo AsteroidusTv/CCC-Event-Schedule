@@ -4,7 +4,7 @@ use std::io::Read;
 
 #[derive(Serialize, Deserialize)]
 pub struct Event {
-    name: String,
+    pub name: String,
     date: String,
     description: String,
 }
