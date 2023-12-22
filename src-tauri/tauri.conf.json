@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "nlss",
+    "productName": "CCC Event Manager",
     "version": "0.0.0"
   },
   "tauri": {
@@ -17,8 +17,13 @@
         "all": false,
         "open": true
       },
-      "notification": {
-        "all": true
+      "dialog": {
+        "all": true, 
+        "ask": true, 
+        "confirm": true, 
+        "message": true, 
+        "open": true, 
+        "save": true 
       }
     },
     "bundle": {

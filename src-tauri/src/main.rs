@@ -18,8 +18,8 @@ fn verify_file(file: &str, content: &str) {
 #[tauri::command]
 fn create_event(create_name_value: &str, create_date_value: &str, create_description_value: &str) -> String {
     if !verify_json_content(create_name_value.to_string()) {
-        let result = write_json(create_name_value.to_string(), create_date_value.to_string(), create_description_value.to_string());
-        format!("{:?}", result)
+        write_json(create_name_value.to_string(), create_date_value.to_string(), create_description_value.to_string());
+        "Project created successfuly".to_string()
     }
     else {
         "You can not create two event with the same name !".to_string()
