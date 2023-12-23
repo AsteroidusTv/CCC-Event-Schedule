@@ -6,6 +6,13 @@ const createDateInput = document.getElementById("createDateInput");
 const createDescriptionInput = document.getElementById("createDescriptionInput");
 const showEvents = document.getElementById('showEvents');
 
+function compareDates(event1, event2) {
+  const date1 = new Date(event1.date);
+  const date2 = new Date(event2.date);
+  
+  return date1 - date2;
+}
+
 async function createEvent() {
   const result = await invoke("create_event", {
       createNameValue: createNameInput.value,
@@ -17,9 +24,24 @@ async function createEvent() {
 
 async function showEvent() {
   const result = await invoke("show_event");
-  const showEvents = document.getElementById("showEvents"); // Assurez-vous d'avoir un élément avec cet ID dans votre HTML
+  result.sort(compareDates);
+
+  if (result.length > 0) {
+    const nextEvent = result[0];
+    const currentDate = new Date();
+
+    if (new Date(nextEvent.date) > currentDate) {
+      console.log("Le prochain événement est :", nextEvent);
+    } else {
+      console.log("Tous les événements sont déjà passés.");
+    }
+  } else {
+    console.log("Il n'y a pas d'événements.");
+  }
 
   for (var i = 0; i < result.length; i++) {
+    const event = result[i];
+
     const eventDiv = document.createElement('div');
     const eventName = document.createElement('p');
     const eventDate = document.createElement('p');
@@ -28,11 +50,11 @@ async function showEvent() {
 
     eventDiv.classList.add("event-container");
 
-    eventName.textContent = result[i].name;
-    eventDate.textContent = result[i].date;
-    eventDescription.textContent = result[i].description;
+    eventName.textContent = event.name;
+    eventDate.textContent = event.date;
+    eventDescription.textContent = event.description;
 
-    eventDeleteButton.id = result[i].name;
+    eventDeleteButton.id = event.name;
     eventDeleteButton.textContent = "Delete";
 
     eventDiv.appendChild(eventName);
@@ -42,10 +64,9 @@ async function showEvent() {
 
     showEvents.appendChild(eventDiv);
 
-    // Utilisation d'une IIFE pour capturer la bonne référence de eventDeleteButton
     (function(button) {
       button.onclick = function() {
-        deleteEvent(button.id)
+        deleteEvent(button.id);
       };
     })(eventDeleteButton);
   }
@@ -57,9 +78,6 @@ async function deleteEvent(eventId) {
   });
   location.reload();
 }
-
-
-
 
 window.addEventListener("DOMContentLoaded", () => {
   showEvent()
