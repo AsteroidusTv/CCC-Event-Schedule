@@ -6,11 +6,28 @@ const createDateInput = document.getElementById("createDateInput");
 const createDescriptionInput = document.getElementById("createDescriptionInput");
 const showEvents = document.getElementById('showEvents');
 
-function compareDates(event1, event2) {
-  const date1 = new Date(event1.date);
-  const date2 = new Date(event2.date);
-  
-  return date1 - date2;
+function createEventContainer(event) {
+  const eventDiv = document.createElement('div');
+  const elements = ['name', 'date', 'description'];
+
+  eventDiv.classList.add("event-container");
+
+  elements.forEach(element => {
+    const p = document.createElement('p');
+    p.textContent = event[element];
+    eventDiv.appendChild(p);
+  });
+
+  return eventDiv;
+}
+
+function createDeleteButton(eventId) {
+  const eventDeleteButton = document.createElement('button');
+
+  eventDeleteButton.id = eventId;
+  eventDeleteButton.textContent = "Delete";
+
+  return eventDeleteButton;
 }
 
 async function createEvent() {
@@ -19,65 +36,60 @@ async function createEvent() {
       createDateValue: createDateInput.value,
       createDescriptionValue: createDescriptionInput.value,
   });
-  alert(result);
 }
 
 async function showEvent() {
   const result = await invoke("show_event");
-  result.sort(compareDates);
+  result.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  if (result.length > 0) {
-    const nextEvent = result[0];
-    const currentDate = new Date();
+  const currentDate = new Date();
+  const upcomingEvents = [];
 
-    if (new Date(nextEvent.date) > currentDate) {
-      console.log("Le prochain événement est :", nextEvent);
+  for (const event of result) {
+    const eventDate = new Date(event.date);
+
+    if (eventDate >= currentDate) {
+      upcomingEvents.push(event);
     } else {
-      console.log("Tous les événements sont déjà passés.");
+      await deleteEvent(event.name);
     }
-  } else {
-    console.log("Il n'y a pas d'événements.");
   }
 
-  for (var i = 0; i < result.length; i++) {
-    const event = result[i];
+  const nextEventDiv = document.querySelector('.next-event');
+  nextEventDiv.innerHTML = '';
 
-    const eventDiv = document.createElement('div');
-    const eventName = document.createElement('p');
-    const eventDate = document.createElement('p');
-    const eventDescription = document.createElement('p');
-    const eventDeleteButton = document.createElement('button');
+  if (upcomingEvents.length > 0) {
+    const upcomingEvent = upcomingEvents[0];
+    const upcomingEventDiv = createEventContainer(upcomingEvent);
+    const eventDeleteButton = createDeleteButton(upcomingEvent.name);
 
-    eventDiv.classList.add("event-container");
+    eventDeleteButton.onclick = () => deleteEvent(upcomingEvent.name);
 
-    eventName.textContent = event.name;
-    eventDate.textContent = event.date;
-    eventDescription.textContent = event.description;
+    upcomingEventDiv.appendChild(eventDeleteButton);
+    nextEventDiv.appendChild(upcomingEventDiv);
+  } else {
+    nextEventDiv.innerHTML = `<h1>No upcoming events</h1>`;
+  }
 
-    eventDeleteButton.id = event.name;
-    eventDeleteButton.textContent = "Delete";
+  showEvents.innerHTML = ''; // Clear the existing events in the general list
 
-    eventDiv.appendChild(eventName);
-    eventDiv.appendChild(eventDate);
-    eventDiv.appendChild(eventDescription);
+  for (const event of upcomingEvents.slice(1)) {
+    const eventDiv = createEventContainer(event);
+    const eventDeleteButton = createDeleteButton(event.name);
+
+    eventDeleteButton.onclick = () => deleteEvent(event.name);
+
     eventDiv.appendChild(eventDeleteButton);
-
     showEvents.appendChild(eventDiv);
-
-    (function(button) {
-      button.onclick = function() {
-        deleteEvent(button.id);
-      };
-    })(eventDeleteButton);
   }
 }
+
 
 async function deleteEvent(eventId) {
-  await invoke("delete_event", {
-    name: eventId,
-  });
+  await invoke("delete_event", { name: eventId });
   location.reload();
 }
+
 
 window.addEventListener("DOMContentLoaded", () => {
   showEvent()
@@ -86,5 +98,3 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log(createNameInput.value, createDateInput.value, createDescriptionInput.value);
   });
 });
-
-

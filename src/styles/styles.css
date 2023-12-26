@@ -81,6 +81,16 @@ body {
     resize: none;
 }
 
+.next-event {
+    margin-bottom: 10px;
+    border-radius: var(--br);
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sc-bg);
+}
 
 .show-events {
     display: grid;
