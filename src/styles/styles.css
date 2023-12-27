@@ -116,9 +116,6 @@ body {
     cursor: pointer;
 }
 
-.event-container button {
-    background: red;
-}
 
 /* Popups styles */
 .popup {

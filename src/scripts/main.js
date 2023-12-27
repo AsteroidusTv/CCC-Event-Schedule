@@ -61,6 +61,9 @@ async function showEvent() {
   if (upcomingEvents.length > 0) {
     const upcomingEvent = upcomingEvents[0];
     const upcomingEventDiv = createEventContainer(upcomingEvent);
+
+    upcomingEventDiv.classList.remove("event-container");
+
     const eventDeleteButton = createDeleteButton(upcomingEvent.name);
 
     eventDeleteButton.onclick = () => deleteEvent(upcomingEvent.name);
@@ -71,7 +74,7 @@ async function showEvent() {
     nextEventDiv.innerHTML = `<h1>No upcoming events</h1>`;
   }
 
-  showEvents.innerHTML = ''; // Clear the existing events in the general list
+  showEvents.innerHTML = ''; 
 
   for (const event of upcomingEvents.slice(1)) {
     const eventDiv = createEventContainer(event);
